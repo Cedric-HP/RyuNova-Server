@@ -7,41 +7,28 @@ const registerBodyValidation = async (req) =>{
         message: [],
         error: "",
     }
-    if (req.body.name === undefined || req.body.name === "") {
+    const {name, email} = req.body
+    const nameCheck = await duplicateValidate(name, "name")
+    if (!nameCheck.status) {
+        result.status = false
+        console.log({here: true}) 
+        result.error = nameCheck.error
+        return result
+    }
+    if (!nameCheck.validate) {
         result.validate = false
-        result.message.push("Name is not valid");
+        result.message.push("Name already exist");
     }
-    else {
-        const nameCheck = await duplicateValidate(req.body.name, "name")
-        if (!nameCheck.status) {
-            result.status = false
-            return result.error = nameCheck.error
-        }
-        if (!nameCheck.validate) {
-            result.validate = false
-            result.message.push("Name already exist");
-        }
+    const emailCheck = await duplicateValidate(email, "email")
+    if (!emailCheck.status) {
+        result.status = false
+        result.error = emailCheck.error
+        return result
     }
-    
-    if (req.body.email === undefined  || req.body.email === "") {
+    if (!emailCheck.validate) {
         result.validate = false
-        result.message.push("Email is not valid");
+        result.message.push("Email already exist");
     }
-    else {
-        const emailCheck = await duplicateValidate(req.body.email, "email")
-        if (!emailCheck.status) {
-            result.status = false
-            return result.error = emailCheck.error
-        }
-        if (!emailCheck.validate) {
-            result.validate = false
-            result.message.push("Email already exist");
-        }
-    }
-    if (req.body.password === undefined  || ( req.body.password.length < 8 || req.body.password.length > 100 )) {
-        result.validate = false
-        result.message.push("Password is not valid");
-    } 
     return result
 }
 

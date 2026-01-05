@@ -24,8 +24,6 @@ main();
 
 app.use(express.json());
 
-app.set("view engine", "ejs");
-
 const { rateLimit } = require('express-rate-limit');
 
 const apiLimiter = rateLimit({ 
@@ -42,12 +40,12 @@ app.get("/", (req, res) => {
 
 app.use((err, req, res, next) => {
     const error = { code: 500 , message: "Something Broke!!" };
-    res.status(500).render("error", { error });
+    res.status(500).json({error: error });
 });
 
 app.use((req, res)=>{
     const error = { code: 404 , message: "Page not found" };
-    res.status(404).render("error", { error });
+    res.status(404).json({error:  error });
 })
 
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));     

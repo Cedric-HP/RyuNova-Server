@@ -1,6 +1,5 @@
 const {User} = require("../../models/user.js")
 const { generateAccessToken } = require("../../utilitises/jwt")
-
 const bcrypt = require("bcrypt");
 
 const login = async (req, res) =>{
@@ -14,7 +13,7 @@ const login = async (req, res) =>{
         }
 
         // Vérifier le mot de passe
-        const valid = await bcrypt.compare(password, user.password);
+        const valid = await bcrypt.compare(password, user.hashedPassword);
         if (!valid) {
             return res.status(401).json({state: false, error: "Incorrect email or password" });
         }

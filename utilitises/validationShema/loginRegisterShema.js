@@ -1,11 +1,6 @@
 import * as yup from 'yup';
 
-export const registerSchema = yup.object({
-    name: 
-        yup.string()
-        .required('Name is required')
-        .min(3, 'Name must be at least 3 characters')
-        .max(50, 'Name must be fewer than 50 characters'),
+export const loginSchema = yup.object({
     email: 
         yup.string()
         .required('Email is required')

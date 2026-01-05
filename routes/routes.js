@@ -1,15 +1,17 @@
 const { Router } = require('express');
 const router = Router();
-// const odysseyController = require('../controllers/controllers');
 const logRegControllers = require('../controllers/logRegControllers');
-// const { authentication } = require('../utils/jwt')
+const { validate } = require('../utilitises/validate');
+const { registerSchema } = require('../utilitises/validationShema/registerDataShema');
+const { loginSchema } = require('../utilitises/validationShema/loginRegisterShema');
+const { authentication } = require('../utilitises/jwt')
 // const { authenticationPSW } = require('../utils/psw')
 
-router.post('/register', logRegControllers.postRegister)
+router.post('/register', validate(registerSchema) ,logRegControllers.postRegister)
 
-router.post('/login', logRegControllers.postLogin)
+router.post('/login', validate(loginSchema), logRegControllers.postLogin)
 
-// router.get('/status', odysseyController.getStatus);
+router.get('/status', authentication, logRegControllers.status);
 
 // router.get('/api/:entity', authenticationPSW, odysseyController.getEntity);
 

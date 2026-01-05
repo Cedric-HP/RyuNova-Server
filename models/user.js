@@ -36,7 +36,7 @@ const User = sequelize.define("User", {
   description: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'active',
+    defaultValue: '',
     validate: {
       max: 1000,
     },
@@ -44,7 +44,7 @@ const User = sequelize.define("User", {
   avatarUrl: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'active',
+    defaultValue: '',
     validate: {
       max: 1000,
     },
@@ -52,7 +52,7 @@ const User = sequelize.define("User", {
   bannerUrl: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'active',
+    defaultValue: '',
     validate: {
       max: 1000,
     },

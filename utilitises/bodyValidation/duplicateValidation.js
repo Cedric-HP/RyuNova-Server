@@ -13,7 +13,8 @@ const duplicateValidate = async (valueToCheck, key) => {
         return result
     } catch (error) {
         result.status = false
-        return result.error = error
+        result.error = error
+        return result
     }
 }
 
