@@ -1,4 +1,4 @@
-const {User} = require("../../models/index.js")
+const {User} = require("../../models")
 const { duplicateValidate } = require("../../utilitises/bodyValidation/duplicateValidation.js")
 
 const checkDuplicate = async (req, res) =>{

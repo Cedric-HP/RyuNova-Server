@@ -1,4 +1,4 @@
-const {User} = require("../../models/index.js")
+const {User} = require("../../models")
 const { generateAccessToken } = require("../../utilitises/jwt")
 const bcrypt = require("bcrypt");
 
@@ -7,7 +7,7 @@ const login = async (req, res) =>{
         const { email, password } = req.body;
 
         // Chercher l'utilisateur
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ where: { email: email } });
         if (!user) {
             return res.status(401).json({state: false, error: "Incorrect email or password" });
         }

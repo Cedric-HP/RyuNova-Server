@@ -1,11 +1,17 @@
 const { Router } = require('express');
 const router = Router();
-const logRegControllers = require('../controllers/logRegControllers');
 const { validate } = require('../utilitises/validate');
 const { registerSchema } = require('../utilitises/validationShema/registerDataShema');
 const { loginSchema } = require('../utilitises/validationShema/loginRegisterShema');
 const { authentication } = require('../utilitises/jwt')
-// const { authenticationPSW } = require('../utils/psw')
+
+// Controller
+
+const logRegControllers = require('../controllers/logRegControllers');
+const userControllers = require('../controllers/userControllers');
+const contentControllers = require('../controllers/contentControllers');
+
+// Log Register Routes
 
 router.post("/register", validate(registerSchema) ,logRegControllers.postRegister)
 
@@ -13,17 +19,28 @@ router.post("/login", validate(loginSchema), logRegControllers.postLogin)
 
 router.get("/logout", authentication, logRegControllers.postLogout);
 
-router.get("/checkduplicate", logRegControllers.getCheckDuplicate)
-router.get("/status", authentication ,logRegControllers.getStatus)
+router.get("/user/checkduplicate", logRegControllers.getCheckDuplicate)
 
-// router.get('/api/:entity', authenticationPSW, odysseyController.getEntity);
+// router.post("/user/update", validate(registerSchema) ,logRegControllers.postRegister)
 
-// router.post('/api/:entity', odysseyController.postEntity);
+// router.post("/user/delet", validate(registerSchema) ,logRegControllers.postRegister)
 
-// router.put('/api/:entity/:id', authenticationPSW, odysseyController.putEntity);
+// User Routes
 
-// router.delete('/api/:entity/:id', authenticationPSW, odysseyController.deleteEntity);
+router.get("/profile", authentication ,userControllers.getProfile)
 
-// router.post('/api/navigation/:mode', authenticationPSW, odysseyController.navigation);
+router.get("/profile/:userId", userControllers.getUserById)
+
+// Images Routes
+
+router.get("/image/:imageId", contentControllers.getImageById)
+
+// router.get("/image/thumbail/:imageId", contentControllers.getImageById)
+
+// router.get("/image/full/:imageId", contentControllers.getImageById)
+
+// Search Route
+
+// router.get("/search", userControllers.getUserById)
 
 module.exports = router;
