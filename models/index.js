@@ -2,6 +2,7 @@ const { User } = require("./user.js")
 const { Image } = require("./image.js")
 const { Tag } = require("./tag.js")
 const { Comment } = require("./comment.js")
+const {BlackListToken} = require("./blackListToken.js")
 const sequelize = require("../db");
 
 const User_Image = sequelize.define('User_Image', {}, { timestamps: false });
@@ -30,5 +31,6 @@ module.exports = {
     User,
     Image,
     Tag,
-    Comment
+    Comment,
+    BlackListToken
 }

@@ -7,11 +7,14 @@ const { loginSchema } = require('../utilitises/validationShema/loginRegisterShem
 const { authentication } = require('../utilitises/jwt')
 // const { authenticationPSW } = require('../utils/psw')
 
-router.post('/register', validate(registerSchema) ,logRegControllers.postRegister)
+router.post("/register", validate(registerSchema) ,logRegControllers.postRegister)
 
-router.post('/login', validate(loginSchema), logRegControllers.postLogin)
+router.post("/login", validate(loginSchema), logRegControllers.postLogin)
 
-router.get('/status', authentication, logRegControllers.status);
+router.get("/logout", authentication, logRegControllers.postLogout);
+
+router.get("/checkduplicate", logRegControllers.getCheckDuplicate)
+router.get("/status", authentication ,logRegControllers.getStatus)
 
 // router.get('/api/:entity', authenticationPSW, odysseyController.getEntity);
 

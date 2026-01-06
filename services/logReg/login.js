@@ -1,4 +1,4 @@
-const {User} = require("../../models/user.js")
+const {User} = require("../../models/index.js")
 const { generateAccessToken } = require("../../utilitises/jwt")
 const bcrypt = require("bcrypt");
 
@@ -20,10 +20,15 @@ const login = async (req, res) =>{
 
         const accessToken = generateAccessToken(user);
 
-        res.json({state: true, message: "Successful login", userId: user.id , token: accessToken});
+        res.status(201).json({state: true, message: "Successful login", userId: user.id , token: accessToken});
     } catch (error) {
         res.status(500).json({state: false, error: error.message });
   } 
 }
 
 module.exports = {login}
+
+// router.get("/logout", (req, res) => {
+// 	res.clearCookie("jwtToken");
+// 	res.redirect('/');
+// });

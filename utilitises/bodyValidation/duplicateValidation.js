@@ -1,4 +1,4 @@
-const {User} = require("../../models/user")
+const {User} = require("../../models/index")
 
 const duplicateValidate = async (valueToCheck, key) => {
     const result = {

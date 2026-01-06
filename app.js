@@ -5,7 +5,7 @@ const sequelize = require("./db")
 const payload = { name: 'RyuNova Server', version: '1.0.0' }
 const PORT = process.env.PORT || 3000;
 require("dotenv").config();
-const { User, Image, Tag, Comment} = require('./models/index');
+const { User, Image, Tag, Comment, BlackListToken} = require('./models/index');
 async function main() {
   try {
     await sequelize.authenticate();
@@ -13,6 +13,7 @@ async function main() {
     await Image.sync();
     await Comment.sync();
     await Tag.sync();
+    await BlackListToken.sync();
     await sequelize.sync();
     console.log('Base synchronisée.');
   } catch (e) {

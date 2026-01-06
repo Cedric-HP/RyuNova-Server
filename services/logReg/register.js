@@ -1,6 +1,6 @@
 const BCRYPT_HASH = parseInt(process.env.BCRYPT_HASH)
 const bcrypt = require("bcrypt");
-const { User } = require("../../models/user.js");
+const { User } = require("../../models/index.js");
 const { registerBodyValidation } = require("../../utilitises/bodyValidation/registerBodyValidation.js");
 
 const register = async (req, res) => {
