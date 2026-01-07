@@ -19,7 +19,7 @@ router.post("/login", validate(loginSchema), logRegControllers.postLogin)
 
 router.get("/logout", authentication, logRegControllers.postLogout);
 
-router.get("/user/checkduplicate", logRegControllers.getCheckDuplicate)
+router.get("/checkduplicate", logRegControllers.getCheckDuplicate)
 
 // router.post("/user/update", validate(registerSchema) ,logRegControllers.postRegister)
 
@@ -42,5 +42,9 @@ router.get("/image/:imageId", contentControllers.getImageById)
 // Search Route
 
 // router.get("/search", userControllers.getUserById)
+
+// Admin Routes
+
+
 
 module.exports = router;

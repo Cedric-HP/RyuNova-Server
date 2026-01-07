@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require("cors")
 const app = express();
 const router = require("./routes/routes")
 const sequelize = require("./db")
@@ -22,6 +23,12 @@ async function main() {
 }
 
 main();
+
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+}));
 
 app.use(express.json());
 

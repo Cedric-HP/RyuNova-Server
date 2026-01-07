@@ -12,8 +12,8 @@ const checkDuplicate = async (req, res) =>{
         try{
             const duplicate = await duplicateValidate(value, type)
             if (!duplicate.status) throw {message: duplicate.error }
-            if (!duplicate.validate) return res.status(200).json({state: false, message: `${value} already exist!`})
-            res.status(200).json({state: true, value: value})
+            if (!duplicate.validate) return res.status(200).json({state: false, type: type, value: value, message: `${value} already exist!`})
+            res.status(200).json({state: true, type: type, value: value})
         } catch (err) {
             throw {message : err}
         }

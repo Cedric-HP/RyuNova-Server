@@ -19,10 +19,7 @@ const register = async (req, res) => {
             hashedPassword: hashedPassword,
         });
         res.status(201).json({state: true, data: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role
+            id: user.id
         }})
     }
     catch (error) {
