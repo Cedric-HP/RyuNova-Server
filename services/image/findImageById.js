@@ -13,10 +13,11 @@ const findImageById = async (req, res) =>{
         if (!image) {
             return res.status(404).json({state: false, error: `Image id: ${imageId} not found!` });
         }
-        const imageData = {
+        const imageFindData = {
             id: image.id,
             title: image.title,
             description: image.description,
+            authorId: image.authorId,
             url: "",
             views: image.views,
             likes: image.imageLikes.length,
@@ -25,7 +26,7 @@ const findImageById = async (req, res) =>{
             createdAt: image.createdAt
 
         }
-        res.status(200).json({state: true, data: imageData});
+        res.status(200).json({state: true, data: imageFindData});
     } catch (error) {
         res.status(500).json({state: false, error: error.message });
   } 

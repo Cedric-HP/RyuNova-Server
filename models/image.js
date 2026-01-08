@@ -12,9 +12,17 @@ const Image = sequelize.define("Image", {
   description: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'active',
+    defaultValue: '',
     validate: {
       max: 1000,
+    },
+  },
+  imageCategory: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'image',
+    validate: {
+      isIn: [['image', 'avatar', 'banner']],
     },
   },
   imageType: {

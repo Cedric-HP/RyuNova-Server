@@ -9,18 +9,24 @@ const login = async (req, res) =>{
         // Chercher l'utilisateur
         const user = await User.findOne({ where: { email: email } });
         if (!user) {
-            return res.status(401).json({state: false, error: "Incorrect email or password" });
+            return res.status(200).json({state: false, error: "Incorrect email or password" });
         }
 
         // Vérifier le mot de passe
         const valid = await bcrypt.compare(password, user.hashedPassword);
         if (!valid) {
-            return res.status(401).json({state: false, error: "Incorrect email or password" });
+            return res.status(200).json({state: false, error: "Incorrect email or password" });
         }
 
         const accessToken = generateAccessToken(user);
 
-        res.status(201).json({state: true, message: "Successful login", userId: user.id , token: accessToken});
+        res.status(201).json({
+            state: true, message: "Successful login", 
+            data: {
+                userId: user.id , 
+                token: accessToken
+            }
+        });
     } catch (error) {
         res.status(500).json({state: false, error: error.message });
   } 
