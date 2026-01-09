@@ -8,7 +8,32 @@ const getProfileData = async (req, res) =>{
             attributes: { 
                 exclude: ['hashedPassword', "updatedAt", "followedId", "followersId", "role"]     
             },
-            include: [ "images", "imageLiked", "followers", "followed", "commentLiked", "commentPosted"]
+            include: [ 
+                {
+                    association: "images",
+                    attributes: ["id"]
+                },
+                {
+                    association: "imageLiked",
+                    attributes: ["id"]
+                },
+                {
+                    association: "followers",
+                    attributes: ["id"]
+                },
+                {
+                    association: "followed",
+                    attributes: ["id"]
+                },
+                {
+                    association: "commentLiked",
+                    attributes: ["id"]
+                },
+                {
+                    association: "commentPosted",
+                    attributes: ["id"]
+                }
+            ]
         });
         if (!user) {
             const {__, accessToken} = req.headers.authorization.split(" ")

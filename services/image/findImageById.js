@@ -6,9 +6,9 @@ const findImageById = async (req, res) =>{
         const image = await Image.findOne({
             where: {id: imageId},
             attributes: { 
-                exclude: ["updatedAt", "imageType", "imageName", "imageData"]     
+                exclude: ["updatedAt"]     
             },
-            include: [ "authorId", "imageLikes", "commentList", "tagList"]
+            include: [ "author", "imageLikes", "commentList", "tagList"]
         });
         if (!image) {
             return res.status(404).json({state: false, error: `Image id: ${imageId} not found!` });
@@ -18,13 +18,12 @@ const findImageById = async (req, res) =>{
             title: image.title,
             description: image.description,
             authorId: image.authorId,
-            url: "",
+            url: image.url,
             views: image.views,
             likes: image.imageLikes.length,
             commentList: image.commentList,
             tags: image.lagList,
             createdAt: image.createdAt
-
         }
         res.status(200).json({state: true, data: imageFindData});
     } catch (error) {

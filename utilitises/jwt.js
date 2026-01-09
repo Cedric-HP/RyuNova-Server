@@ -20,12 +20,13 @@ async function authentication(req, res, next){
         if(!payload) throw {message : "Invalid token"}
         const user = await User.findByPk(payload.userId)
         if(!user) throw {message : "Invalid token"}
+        console.log({ok: true})
         req.user = {
             id : user.id
         }
         next()
     } catch (error) {
-        res.status(401).json({state: true, validate: false, error: error.message})
+        res.status(401).json({state: false, authorized: false, error: error.message})
     }
 }
 

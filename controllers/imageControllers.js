@@ -5,7 +5,8 @@ exports.postImage = (req, res) => {
     createImage(req, res)
 };
 
-exports.getFullImage= (req, res) => {
+exports.getFullImage = (req, res) => {
+    console.log({here: "here"})
     findFullImageById(req, res)
 };
 

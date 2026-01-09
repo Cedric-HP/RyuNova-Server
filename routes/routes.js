@@ -1,9 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
 const { validate } = require('../utilitises/validate');
-const { imageSchema } = require('../utilitises/validationShema/imageShema');
 const { loginSchema, registerSchema } = require('../utilitises/validationShema/loginRegisterShema');
 const { authentication } = require('../utilitises/jwt')
 
@@ -40,9 +37,9 @@ router.get("/image/:imageId", contentControllers.getImageById)
 
 // router.get("/image/thumbail/:imageId", contentControllers.getImageById)
 
-router.get("/image/full/:imageId", imageControllers.postImage)
+router.get("/image/full/:imageFullId", imageControllers.getFullImage)
 
-router.post("/image/upload", authentication, validate(imageSchema), upload.single("image"), imageControllers.postImage)
+
 
 // Search Route
 

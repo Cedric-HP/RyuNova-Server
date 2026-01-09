@@ -25,17 +25,14 @@ const Image = sequelize.define("Image", {
       isIn: [['image', 'avatar', 'banner']],
     },
   },
-  imageType: {
+  path: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  url: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  imageName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  imageData: {
-    type: DataTypes.BLOB('long'),
-    allowNull: false,
+    defaultValue: '',
   },
   views: {
     type: DataTypes.INTEGER,

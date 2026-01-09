@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require("cors")
 const app = express();
 const router = require("./routes/routes")
+const routerImage = require("./routes/routeImage")
 const sequelize = require("./db")
 const payload = { name: 'RyuNova Server', version: '1.0.0' }
 const PORT = process.env.PORT || 3000;
@@ -30,8 +31,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
-
 const { rateLimit } = require('express-rate-limit');
 
 const apiLimiter = rateLimit({ 
@@ -40,6 +39,12 @@ const apiLimiter = rateLimit({
     message: "Too many request, try again later." 
 });
 
+app.use('/image/upload', apiLimiter, routerImage)
+
+app.use('/uploads', express.static('uploads'))
+
+app.use(express.json());
+
 app.use('/', apiLimiter, router);
 
 app.get("/", (req, res) => {
@@ -47,7 +52,7 @@ app.get("/", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-    const error = { code: 500 , message: "Something Broke!!" };
+    const error = { code: 500 , message: "Something Broke!!"};
     res.status(500).json({error: error });
 });
 
@@ -56,4 +61,4 @@ app.use((req, res)=>{
     res.status(404).json({error:  error });
 })
 
-app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));     
+app.listen(PORT, () => console.log({serverState: true, message: `Listening on http://localhost:${PORT}`}));     

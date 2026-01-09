@@ -13,7 +13,7 @@ User.hasMany(User, {foreignKey: "followedId", as: "followers"});
 User.hasMany(User, {foreignKey: "followersId", as: "followed"});
 
 User.hasMany(Image, { foreignKey: "userId", as: "images"});
-Image.belongsTo(User, { foreignKey: "userId", as: "authorId" });
+Image.belongsTo(User, { foreignKey: "userId", as: "author" });
 User.belongsToMany(Image, {through: User_Image, foreignKey: "userLikesId", as: "imageLiked"});
 Image.belongsToMany(User, {through: User_Image, foreignKey: "imageLikedId", as: "imageLikes"});
 
