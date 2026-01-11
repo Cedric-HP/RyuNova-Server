@@ -32,6 +32,7 @@ app.use(cors({
 }));
 
 const { rateLimit } = require('express-rate-limit');
+const { multerErrorHandler } = require('./utilitises/multer/multerErrorHandler');
 
 const apiLimiter = rateLimit({ 
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
@@ -41,7 +42,7 @@ const apiLimiter = rateLimit({
 
 app.use('/image/upload', apiLimiter, routerImage)
 
-app.use('/uploads', express.static('uploads'))
+app.use('/api', express.static('api'))
 
 app.use(express.json());
 
@@ -51,8 +52,11 @@ app.get("/", (req, res) => {
   res.status(200).json(payload);
 });
 
+// app.use(multerErrorHandler);
+
 app.use((err, req, res, next) => {
     const error = { code: 500 , message: "Something Broke!!"};
+    console.log(err)
     res.status(500).json({error: error });
 });
 

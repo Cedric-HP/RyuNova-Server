@@ -25,10 +25,6 @@ const Image = sequelize.define("Image", {
       isIn: [['image', 'avatar', 'banner']],
     },
   },
-  path: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   url: {
     type: DataTypes.STRING,
     allowNull: false,

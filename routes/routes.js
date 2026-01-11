@@ -10,6 +10,7 @@ const logRegControllers = require('../controllers/logRegControllers');
 const userControllers = require('../controllers/userControllers');
 const contentControllers = require('../controllers/contentControllers');
 const imageControllers = require('../controllers/imageControllers');
+const testControllers = require('../controllers/controllers');
 
 // Log Register Routes
 
@@ -33,11 +34,9 @@ router.get("/profile/:userId", userControllers.getUserById)
 
 // Images Routes
 
+router.get("/test/thumbnail", testControllers.getTestTumbnail )
+
 router.get("/image/:imageId", contentControllers.getImageById)
-
-// router.get("/image/thumbail/:imageId", contentControllers.getImageById)
-
-router.get("/image/full/:imageFullId", imageControllers.getFullImage)
 
 
 

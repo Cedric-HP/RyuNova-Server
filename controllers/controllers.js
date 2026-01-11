@@ -1,47 +1,7 @@
-const BCRYPT_HASH = parseInt(process.env.BCRYPT_HASH)
-const bcrypt = require("bcrypt");
-// const { generateAccessToken } = require('../utils/jwt');
-const { getEntityList } = require("../service/getEntityList");
-const { createEntity } = require("../service/createEntity");
-const { updateEntity } = require("../service/updateEntity");
-const { deleteEntity } = require("../service/deleteEntity");
-const { navigation } = require("../service/navigation");
+const { createThumbnail } = require("../utilitises/thumbnail/createThumbnail");
 
-// Get Status
-
-exports.getStatus = (req, res) => {
-    const payload = {
-        scgStatus: "online"
-    }
-    res.status(200).json(payload)
-};
-
-// Get Entity List
-
-exports.getEntity = (req, res) => {
-    getEntityList(req, res)
-};
-
-// Post Entity
-
-exports.postEntity = (req, res) => {
-    createEntity(req, res)
-};
-
-// Put Entity
-
-exports.putEntity = (req, res) => {
-    updateEntity(req, res)
-};
-
-// Delete Entity
-
-exports.deleteEntity = (req, res) => {
-    deleteEntity(req, res)
-};
-
-// Navigation
-
-exports.navigation = (req, res) => {
-    navigation(req, res)
+exports.getTestTumbnail = async (req, res) => {
+    const path1 = await createThumbnail("api\\image\\full\\1768060254621.jpg", "image", 600)
+    const path2 = await createThumbnail("api\\image\\full\\1768060254621.jpg", "image", 300)
+    res.status(200).json({state: true, message: "Thumbnail created!", path1: path1, path2: path2})
 };

@@ -20,7 +20,7 @@ async function authentication(req, res, next){
         if(!payload) throw {message : "Invalid token"}
         const user = await User.findByPk(payload.userId)
         if(!user) throw {message : "Invalid token"}
-        console.log({ok: true})
+        console.log({AUTH: true})
         req.user = {
             id : user.id
         }
