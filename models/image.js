@@ -5,8 +5,9 @@ const Image = sequelize.define("Image", {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: "",
     validate: {
-      len: [3, 50],
+      max: 50,
     },
   },
   description: {

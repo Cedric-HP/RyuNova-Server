@@ -32,5 +32,8 @@ module.exports = {
     Image,
     Tag,
     Comment,
-    BlackListToken
+    BlackListToken,
+    Tag_Image,
+    User_Comment,
+    User_Image
 }

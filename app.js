@@ -52,7 +52,7 @@ app.get("/", (req, res) => {
   res.status(200).json(payload);
 });
 
-// app.use(multerErrorHandler);
+app.use(multerErrorHandler);
 
 app.use((err, req, res, next) => {
     const error = { code: 500 , message: "Something Broke!!"};

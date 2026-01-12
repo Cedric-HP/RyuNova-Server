@@ -1,4 +1,4 @@
-const {Image} = require("../../models")
+const {Image, Tag_Image} = require("../../models")
 
 const findImageById = async (req, res) =>{
     try {
@@ -8,7 +8,24 @@ const findImageById = async (req, res) =>{
             attributes: { 
                 exclude: ["updatedAt"]     
             },
-            include: [ "author", "imageLikes", "commentList", "tagList"]
+            include: [ 
+                "author", 
+                "imageLikes", 
+                "commentList", 
+                {
+                    association: "tagList", 
+                    attributes: {
+                        exclude: [
+                            "id", 
+                            "createdAt", 
+                            "updatedAt"
+                        ]
+                    },
+                    through: {
+                        attributes: []
+                    }
+                }
+            ]
         });
         if (!image) {
             return res.status(404).json({state: false, error: `Image id: ${imageId} not found!` });
@@ -22,7 +39,7 @@ const findImageById = async (req, res) =>{
             views: image.views,
             likes: image.imageLikes.length,
             commentList: image.commentList,
-            tags: image.lagList,
+            tags: image.tagList,
             createdAt: image.createdAt
         }
         res.status(200).json({state: true, data: imageFindData});
@@ -32,3 +49,4 @@ const findImageById = async (req, res) =>{
 }
 
 module.exports = {findImageById}
+

@@ -4,7 +4,6 @@ const path = require("path");
 
 const createThumbnail = async (imagePath, imageCategory, size) => {
     try {
-
         const filename = size+"_"+path.parse(imagePath).name;
 
         // Dynamic Thumbnail folder
@@ -24,11 +23,17 @@ const createThumbnail = async (imagePath, imageCategory, size) => {
             `${filename}.webp`
         );
 
+        const fitType = {
+            "image": "outside",
+            "avatar": "cover",
+            "banner": "inside"
+        }
+
         // Generation of the thumbnail
         await sharp(imagePath)
-        .resize( size, size, {
-            fit: "cover",
-            position: "centre"
+        .resize( size, imageCategory === "banner" ? null : size, {
+            fit: fitType[imageCategory] || "outside",
+            position: "center"
         })
         .webp({
             quality: 80,
