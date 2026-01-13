@@ -22,7 +22,7 @@ const findUserById = async (req, res) =>{
             views: 0,
             likes: 0,
             images: user.images.length,
-            articles: [],
+            articles: 0,
             followers: user.followers.length,
             createdAt: user.createdAt
 
