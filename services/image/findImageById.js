@@ -1,10 +1,10 @@
-const {Image, Tag_Image} = require("../../models")
+const {Image} = require("../../models")
 
 const findImageById = async (req, res) =>{
     try {
         const imageId = req.params.imageId
         const image = await Image.findOne({
-            where: {id: imageId},
+            where: {id: imageId, imageCategory: "image"},
             attributes: { 
                 exclude: ["updatedAt"]     
             },

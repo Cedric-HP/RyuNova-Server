@@ -2,11 +2,11 @@ const {User} = require("../../models")
 
 const findUserById = async (req, res) =>{
     try {
-        const userId = req.params.userId
+        const userId = parseInt(req.params.userId)
         const user = await User.findOne({
             where: {id: userId},
             attributes: { 
-                exclude: ['hashedPassword', "updatedAt", "followedId", "followersId", "role"]     
+                exclude: ['hashedPassword', "updatedAt", "role"]     
             },
             include: [ "images", "followers"]
         });

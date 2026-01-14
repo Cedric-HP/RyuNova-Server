@@ -3,19 +3,19 @@ const sequelize = require("../db");
 
 const Image = sequelize.define("Image", {
   title: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(50),
     allowNull: false,
     defaultValue: "",
     validate: {
-      max: 50,
+      len: [0, 50]
     },
   },
   description: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(2000),
     allowNull: false,
     defaultValue: '',
     validate: {
-      max: 1000,
+      len: [0, 2000]
     },
   },
   imageCategory: {

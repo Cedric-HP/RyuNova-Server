@@ -8,9 +8,10 @@ const sequelize = require("../db");
 const User_Image = sequelize.define('User_Image', {}, { timestamps: false });
 const Tag_Image = sequelize.define('Tag_Image', {}, { timestamps: false });
 const User_Comment= sequelize.define('User_Comment', {}, { timestamps: false });
+const User_Follow= sequelize.define('User_Follow', {}, { timestamps: false });
 
-User.hasMany(User, {foreignKey: "followedId", as: "followers"});
-User.hasMany(User, {foreignKey: "followersId", as: "followed"});
+User.belongsToMany(User, {through: "User_Follow", as: "following", foreignKey: "userId", otherKey: "followedId"});
+User.belongsToMany(User, {through: "User_Follow", as: "followers", foreignKey: "followedId", otherKey: "userId"});
 
 User.hasMany(Image, { foreignKey: "userId", as: "images"});
 Image.belongsTo(User, { foreignKey: "userId", as: "author" });
@@ -35,5 +36,6 @@ module.exports = {
     BlackListToken,
     Tag_Image,
     User_Comment,
-    User_Image
+    User_Image,
+    User_Follow
 }

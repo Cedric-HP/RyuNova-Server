@@ -22,7 +22,7 @@ async function authentication(req, res, next){
         if(!user) throw {message : "Invalid token"}
         console.log({AUTH: true})
         req.user = {
-            id : user.id
+            id : parseInt(user.id)
         }
         next()
     } catch (error) {

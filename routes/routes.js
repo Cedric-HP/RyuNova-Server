@@ -32,17 +32,20 @@ router.get("/profile", authentication, userControllers.getProfile)
 
 router.get("/profile/:userId", userControllers.getUserById)
 
-// Images Routes
-
-router.get("/test/thumbnail", testControllers.getTestTumbnail )
-
-router.get("/image/:imageId", contentControllers.getImageById)
-
+router.get("/follow/:userId", authentication, userControllers.getFollow)
 
 
 // Search Route
 
 // router.get("/search", userControllers.getUserById)
+
+// Content Interaction
+
+router.get("/image/:imageId", contentControllers.getImageById)
+
+router.get("/content/image/:contentId", contentControllers.getAddImageView)
+
+router.get("/content/comment/:contentId", contentControllers.getAddCommentView)
 
 // Admin Routes
 

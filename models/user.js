@@ -3,7 +3,7 @@ const sequelize = require("../db");
 
 const User = sequelize.define("User", {
   name: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(50),
     unique: true,
     allowNull: false,
     validate: {
@@ -16,13 +16,14 @@ const User = sequelize.define("User", {
     unique: true,
     validate: {
       isEmail: true,
+      len: [0, 255]
     },
   },
   hashedPassword: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [8, 100],
+      len: [8, 255],
     },
   },
   role: {
@@ -34,11 +35,11 @@ const User = sequelize.define("User", {
     },
   },
   description: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
     allowNull: false,
     defaultValue: '',
     validate: {
-      max: 1000,
+      len: [0, 1000]
     },
   },
   avatarUrl: {
@@ -46,7 +47,7 @@ const User = sequelize.define("User", {
     allowNull: false,
     defaultValue: '',
     validate: {
-      max: 1000,
+      len: [0, 255]
     },
   },
   bannerUrl: {
@@ -54,7 +55,7 @@ const User = sequelize.define("User", {
     allowNull: false,
     defaultValue: '',
     validate: {
-      max: 1000,
+      len: [0, 255]
     },
   }
 });

@@ -1,17 +1,23 @@
 const {User} = require("../../models")
+const { blacklistToken } = require("../../utilitises/blacklistToken");
 
 const getProfileData = async (req, res) =>{
     try {
-        // Chercher l'utilisateur
+        // search for the user
+        const userId = parseInt(req.user.id)
         const user = await User.findOne({
-            where: {id: req.user.id},
+            where: {id: userId},
             attributes: { 
-                exclude: ['hashedPassword', "updatedAt", "followedId", "followersId", "role"]     
+                exclude: ['hashedPassword', "updatedAt", "role"]     
             },
             include: [ 
                 {
                     association: "images",
-                    attributes: ["id"]
+                    attributes: ["id"],
+                    where: {
+                        imageCategory: "image"
+                    },
+                    required: false
                 },
                 {
                     association: "imageLiked",
@@ -22,7 +28,7 @@ const getProfileData = async (req, res) =>{
                     attributes: ["id"]
                 },
                 {
-                    association: "followed",
+                    association: "following",
                     attributes: ["id"]
                 },
                 {
@@ -36,10 +42,18 @@ const getProfileData = async (req, res) =>{
             ]
         });
         if (!user) {
-            const {__, accessToken} = req.headers.authorization.split(" ")
-            blacklistToken(accessToken)
-            return res.status(404).json({state: false, error: `User id: ${req.user.id} not found!` });
+            try {
+                const [__, accessToken] = req.headers.authorization.split(" ")
+                blacklistToken(accessToken)
+                return res.status(404).json({state: false, error: `User id: ${req.user.id} not found!` });
+            } catch (error) {
+                throw error
+            } 
         }
+        const followersCount = await user.countFollowers();
+        const followingList = user.following.map((item)=>{
+            return {id: item.id}
+        })
         const userData = {
             id: user.id,
             name: user.name,
@@ -52,8 +66,8 @@ const getProfileData = async (req, res) =>{
             imageLiked: user.imageLiked,
             articles: [],
             articleLiked: [],
-            followers: user.followers.length,
-            followed: user.followed,
+            followers: followersCount,
+            following: followingList,
             commentPosted: user.commentPosted,
             commentLiked: user.commentLiked,
             createdAt: user.createdAt
@@ -66,3 +80,4 @@ const getProfileData = async (req, res) =>{
 }
 
 module.exports = {getProfileData}
+

@@ -4,7 +4,7 @@ const app = express();
 const router = require("./routes/routes")
 const routerImage = require("./routes/routeImage")
 const sequelize = require("./db")
-const payload = { name: 'RyuNova Server', version: '1.0.0' }
+const payload = { state: true, name: 'RyuNova Server', version: '1.0.0' }
 const PORT = process.env.PORT || 3000;
 require("dotenv").config();
 const { User, Image, Tag, Comment, BlackListToken} = require('./models/index');
@@ -34,19 +34,29 @@ app.use(cors({
 const { rateLimit } = require('express-rate-limit');
 const { multerErrorHandler } = require('./utilitises/multer/multerErrorHandler');
 
-const apiLimiter = rateLimit({ 
+const apiLimiterMain = rateLimit({ 
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
-    max: parseInt(process.env.RATE_LIMIT_MAX), 
+    max: parseInt(process.env.RATE_LIMIT_MAX_MAIN), 
+    message: "Too many request, try again later." 
+});
+const apiLimiterImageAPI = rateLimit({ 
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
+    max: parseInt(process.env.RATE_LIMIT_MAX_IMAGE_API), 
+    message: "Too many request, try again later." 
+});
+const apiLimiterImageUpload = rateLimit({ 
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
+    max: parseInt(process.env.RATE_LIMIT_MAX_IMAGE_UPLOAD), 
     message: "Too many request, try again later." 
 });
 
-app.use('/image/upload', apiLimiter, routerImage)
+app.use('/image/upload', apiLimiterImageUpload, routerImage)
 
-app.use('/api', express.static('api'))
+app.use('/api', apiLimiterImageAPI, express.static('api'))
 
 app.use(express.json());
 
-app.use('/', apiLimiter, router);
+app.use('/', apiLimiterMain, router);
 
 app.get("/", (req, res) => {
   res.status(200).json(payload);
@@ -55,13 +65,13 @@ app.get("/", (req, res) => {
 app.use(multerErrorHandler);
 
 app.use((err, req, res, next) => {
-    const error = { code: 500 , message: "Something Broke!!"};
+    const error = { state: false , message: "Something Broke!!"};
     console.log(err)
     res.status(500).json({error: error });
 });
 
 app.use((req, res)=>{
-    const error = { code: 404 , message: "Page not found" };
+    const error = { state: false , message: "Page not found" };
     res.status(404).json({error:  error });
 })
 

@@ -7,7 +7,7 @@ const { setAvatarBanner } = require("../../utilitises/user/setAvatarBanner");
 const thumbnailLists ={
     "image": [400, 750],
     "avatar": [30, 50, 55, 75, 200],
-    "banner": [500]
+    "banner": [300, 750]
 }
 const createImage = async (req, res) => {
     try {
