@@ -6,8 +6,13 @@ const routerImage = require("./routes/routeImage")
 const sequelize = require("./db")
 const payload = { state: true, name: 'RyuNova Server', version: '1.0.0' }
 const PORT = process.env.PORT || 3000;
+const SERVER_URL = process.env.SERVER_URL
+const CORS_RYUNOVA = process.env.CORS_RYUNOVA || "http://localhost:3000"
 require("dotenv").config();
+const { rateLimit } = require('express-rate-limit');
+const { multerErrorHandler } = require('./utilitises/multer/multerErrorHandler');
 const { User, Image, Tag, Comment, BlackListToken} = require('./models/index');
+
 async function main() {
   try {
     await sequelize.authenticate();
@@ -26,13 +31,10 @@ async function main() {
 main();
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: CORS_RYUNOVA,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
-
-const { rateLimit } = require('express-rate-limit');
-const { multerErrorHandler } = require('./utilitises/multer/multerErrorHandler');
 
 const apiLimiterMain = rateLimit({ 
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
@@ -75,4 +77,4 @@ app.use((req, res)=>{
     res.status(404).json({error:  error });
 })
 
-app.listen(PORT, () => console.log({serverState: true, message: `Listening on http://localhost:${PORT}`}));     
+app.listen(SERVER_URL || PORT, () => console.log({serverState: true, message: `Listening on ${SERVER_URL || `http://localhost:${PORT}`}`}));     

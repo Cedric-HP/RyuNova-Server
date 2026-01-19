@@ -12,17 +12,23 @@ function generateAccessToken(user) {
 async function authentication(req, res, next){
     try {
         if(!req.headers.authorization) throw {message : "Invalid token"}
+
         const [type, token] = req.headers.authorization.split(" ")
         const checkIfBlacklisted = await BlackListToken.findOne({where: {token: token}})
         if (checkIfBlacklisted) throw {message : "Invalid token"}
+
         if(type !== "Bearer") throw {name : "Invalid token"}
+
         const payload =  jwt.verify(token, ACCESS_SECRET)
         if(!payload) throw {message : "Invalid token"}
+
         const user = await User.findByPk(payload.userId)
         if(!user) throw {message : "Invalid token"}
+
         console.log({AUTH: true})
         req.user = {
-            id : parseInt(user.id)
+            id : parseInt(user.id),
+            role: user.role
         }
         next()
     } catch (error) {

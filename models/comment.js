@@ -9,11 +9,6 @@ const Comment = sequelize.define("Comment", {
       len: [1, 1000],
     },
   },
-  likes: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0
-  },
   isReply: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
