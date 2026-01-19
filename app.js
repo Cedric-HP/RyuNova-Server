@@ -5,8 +5,7 @@ const router = require("./routes/routes")
 const routerImage = require("./routes/routeImage")
 const sequelize = require("./db")
 const payload = { state: true, name: 'RyuNova Server', version: '1.0.0' }
-const PORT = process.env.PORT || 3000;
-const SERVER_URL = process.env.SERVER_URL
+const PORT = process.env.PORT || 4000;
 const CORS_RYUNOVA = process.env.CORS_RYUNOVA || "http://localhost:3000"
 require("dotenv").config();
 const { rateLimit } = require('express-rate-limit');
@@ -77,4 +76,4 @@ app.use((req, res)=>{
     res.status(404).json({error:  error });
 })
 
-app.listen(SERVER_URL || PORT, () => console.log({serverState: true, message: `Listening on ${SERVER_URL || `http://localhost:${PORT}`}`}));     
+app.listen(PORT, () => console.log({serverState: true, message: `Listening on http://localhost:${PORT}`}));     
