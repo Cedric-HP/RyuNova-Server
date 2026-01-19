@@ -29,8 +29,22 @@ async function main() {
 
 main();
 
+const allowedOrigins = [
+  CORS_RYUNOVA,
+  "http://localhost:3000"
+];
+
 app.use(cors({
-  origin: CORS_RYUNOVA,
+  origin: (origin, callback) => {
+    // Autorise SSR / Postman / server-side
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
