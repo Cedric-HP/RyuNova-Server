@@ -1,8 +1,7 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
-// Étape 2 : configurer la connexion Sequelize
-// Création de la connexion
+// Creation of the connection to the data base
 const sequelize = new Sequelize(
     process.env.DB_NAME, 
     process.env.DB_USER, 

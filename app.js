@@ -30,8 +30,8 @@ async function main() {
 main();
 
 const allowedOrigins = [
-  CORS_RYUNOVA,
-  "http://localhost:3000"
+    CORS_RYUNOVA,
+    "http://localhost:3000"
 ];
 
 app.use(cors({

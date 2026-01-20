@@ -36,16 +36,17 @@ router.get("/follow/:userId", authentication, userControllers.getFollow)
 
 
 // Search Route
+router.get("/search", contentControllers.getSearch)
 
 // router.get("/search", userControllers.getUserById)
 
 // Content Interaction
-
+// Get Content
 router.get("/image/:imageId", contentControllers.getImageById)
 
 router.get("/content/image/:contentId", contentControllers.getAddImageView)
 
-router.get("/content/comment/:contentId", contentControllers.getAddCommentView)
+// router.get("/content/article/:contentId", contentControllers.getAddArticleView)
 
 // Admin Routes
 

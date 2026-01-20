@@ -1,4 +1,5 @@
 const { addContentView } = require("../services/content/addContentView");
+const { searchContent } = require("../services/content/searchContent");
 const { findImageById } = require("../services/image/findImageById")
 
 exports.getImageById = (req, res) => {
@@ -13,3 +14,6 @@ exports.getAddCommentView = (req, res) => {
     addContentView(req, res, "comment")
 };
 
+exports.getSearch = (req, res) => {
+    searchContent(req, res)
+}

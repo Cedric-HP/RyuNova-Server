@@ -3,6 +3,8 @@ const {User} = require("../../models")
 const findUserById = async (req, res) =>{
     try {
         const userId = parseInt(req.params.userId)
+
+        // Finding the user by Id
         const user = await User.findOne({
             where: {id: userId},
             attributes: { 
@@ -10,6 +12,7 @@ const findUserById = async (req, res) =>{
             },
             include: [ "images", "followers"]
         });
+        // If user doesn't exit, return code 404 is not found
         if (!user) {
             return res.status(404).json({state: false, error: `User id: ${userId} not found!` });
         }
@@ -25,7 +28,6 @@ const findUserById = async (req, res) =>{
             articles: 0,
             followers: user.followers.length,
             createdAt: user.createdAt
-
         }
         res.status(200).json({state: true, data: userData});
     } catch (error) {
