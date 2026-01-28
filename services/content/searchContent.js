@@ -22,6 +22,7 @@ const searchContent = async (req, res) => {
         } = req.query;
 
         if (!VALID_TYPES.includes(type)) type = "image";
+        if (sort === "follower") sort = "follow";
         if (!VALID_SORTS.includes(sort)) sort = "view";
         if (!VALID_ORDER.includes(order)) order = "DESC";
 
@@ -49,7 +50,11 @@ const searchContent = async (req, res) => {
                 pageSize: PAGE_SIZE,
                 totalResults: 0,
                 totalPages: 0,
-                results: [],
+                results: {
+                    image: [],
+                    user: [],
+                    article: []
+                },
             });
         }
 
@@ -150,7 +155,13 @@ const searchContent = async (req, res) => {
                 : {};
 
             const orderMap = {
-                follow: [[literal('"followers"'), order]],
+                follow: [[literal(`(
+                    SELECT COUNT(*)
+                    FROM "User_Follows"
+                    WHERE "User_Follows"."followedId" = "User"."id"
+                    )`),
+                    order
+                ]],
                 like: [[literal('"likes"'), order]],
                 view: [[literal('"views"'), order]],
                 date: [["createdAt", order]],
@@ -245,7 +256,3 @@ const searchContent = async (req, res) => {
 }
 
 module.exports = {searchContent}
-
-
-
-

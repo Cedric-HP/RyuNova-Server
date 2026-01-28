@@ -1,4 +1,5 @@
 const {Image} = require("../../models")
+const { literal } = require("sequelize");
 
 const findImageById = async (req, res) =>{
     try {
@@ -6,12 +7,30 @@ const findImageById = async (req, res) =>{
         const image = await Image.findOne({
             where: {id: imageId, imageCategory: "image"},
             attributes: { 
-                exclude: ["updatedAt"]     
+                exclude: ["updatedAt"]  ,
+                include: [
+                    [
+                        literal(`(
+                            SELECT COUNT(*)
+                            FROM "Comments"
+                            WHERE "Comments"."imageId" = "Image"."id"
+                        )`),
+                        "totalComment"
+                    ],
+                    [
+                        literal(`(
+                            SELECT COUNT(*)
+                            FROM "Comments"
+                            WHERE "Comments"."imageId" = "Image"."id"
+                            AND "Comments"."isReply" = false
+                        )`),
+                        "parentComment"
+                    ]
+                ]   
             },
             include: [ 
                 "author", 
-                "imageLikes", 
-                "commentList", 
+                "imageLikes",
                 {
                     association: "tagList", 
                     attributes: {
@@ -39,9 +58,11 @@ const findImageById = async (req, res) =>{
             url: image.url,
             views: image.views,
             likes: image.imageLikes.length,
-            commentList: image.commentList,
+            commentList: [],
             tags: image.tagList,
-            createdAt: image.createdAt
+            createdAt: image.createdAt,
+            totalComment: Number(image.get("totalComment")),
+            parentComment: Number(image.get("parentComment"))
         }
         res.status(200).json({state: true, data: imageFindData});
     } catch (error) {
@@ -50,4 +71,3 @@ const findImageById = async (req, res) =>{
 }
 
 module.exports = {findImageById}
-

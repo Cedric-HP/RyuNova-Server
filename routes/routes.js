@@ -4,16 +4,14 @@ const { validate } = require('../utilitises/validate');
 const { loginSchema, registerSchema } = require('../utilitises/validationShema/loginRegisterShema');
 const { authentication } = require('../utilitises/jwt')
 
-// Controller
-
+// CONTROLLERS
 const logRegControllers = require('../controllers/logRegControllers');
 const userControllers = require('../controllers/userControllers');
 const contentControllers = require('../controllers/contentControllers');
-const imageControllers = require('../controllers/imageControllers');
-const testControllers = require('../controllers/controllers');
+const { commentSchema } = require('../utilitises/validationShema/commentSchema');
+const { likeSchema } = require('../utilitises/validationShema/likeShema');
 
-// Log Register Routes
-
+// LOG REGISTER ROUTES
 router.post("/register", validate(registerSchema) ,logRegControllers.postRegister)
 
 router.post("/login", validate(loginSchema), logRegControllers.postLogin)
@@ -26,8 +24,8 @@ router.get("/checkduplicate", logRegControllers.getCheckDuplicate)
 
 // router.post("/user/delet", validate(registerSchema) ,logRegControllers.postRegister)
 
-// User Routes
 
+// USER ROUTES
 router.get("/profile", authentication, userControllers.getProfile)
 
 router.get("/profile/:userId", userControllers.getUserById)
@@ -35,19 +33,25 @@ router.get("/profile/:userId", userControllers.getUserById)
 router.get("/follow/:userId", authentication, userControllers.getFollow)
 
 
+// CONTENT ROUTES
 // Search Route
 router.get("/search", contentControllers.getSearch)
 
-// router.get("/search", userControllers.getUserById)
+router.get("/comment/search", contentControllers.getComment)
 
-// Content Interaction
-// Get Content
 router.get("/image/:imageId", contentControllers.getImageById)
 
+// Content Interaction
 router.get("/content/image/:contentId", contentControllers.getAddImageView)
+
+router.post("/content", authentication, validate(likeSchema), contentControllers.postLike)
 
 // router.get("/content/article/:contentId", contentControllers.getAddArticleView)
 
-// Admin Routes
+router.post("/comment", authentication, validate(commentSchema), contentControllers.postComment)
+
+
+
+// ADMIN ROUTES
 
 module.exports = router;

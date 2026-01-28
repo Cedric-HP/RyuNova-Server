@@ -32,8 +32,8 @@ const createImage = async (req, res) => {
             throw error
         }
 
-        const thumbnailList = thumbnailLists[imageCategory]
-        for (const size of thumbnailList) {
+        const thumbnailSizeList = thumbnailLists[imageCategory]
+        for (const size of thumbnailSizeList) {
             await createThumbnail(newPath, imageCategory, size)
         }
 

@@ -9,7 +9,7 @@ function generateAccessToken(user) {
   return jwt.sign({ userId: user.id }, ACCESS_SECRET, { expiresIn: EXPIRES_IN, algorithm: ALGORITHM });
 }
 
-async function authentication(req, res, next){
+const  authentication = async (req, res, next)=>{
     try {
         if(!req.headers.authorization) throw {message : "Invalid token"}
 
