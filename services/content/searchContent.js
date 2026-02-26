@@ -26,8 +26,8 @@ const searchContent = async (req, res) => {
         if (!VALID_SORTS.includes(sort)) sort = "view";
         if (!VALID_ORDER.includes(order)) order = "DESC";
 
-        page = Number(page);
-        if (isNaN(page) || page < 0) page = 0;
+        page = Number(page) - 1;
+        if (isNaN(page) || page < 1) page = 0;
 
         user = Number(user);
         if (isNaN(user) || user < 1) user = undefined;

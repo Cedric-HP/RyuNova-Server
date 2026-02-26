@@ -1,3 +1,5 @@
+const multer = require("multer");
+
 const multerErrorHandler = (err, req, res, next) => {
   if (err instanceof multer.MulterError || err.message.includes("image")) {
     console.log(err.message)

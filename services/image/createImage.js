@@ -1,15 +1,8 @@
-const { Image, User } = require("../../models");
+const { Image} = require("../../models");
 const path = require("path");
-const { moveFile } = require("../../utilitises/fs/moveFile");
-const { createThumbnail } = require("../../utilitises/thumbnail/createThumbnail");
+const { handleThumbnail } = require("../../utilitises/thumbnail/createThumbnail");
 const { tagHandler } = require("../../utilitises/tag/tagHandler");
 const { setAvatarBanner } = require("../../utilitises/user/setAvatarBanner");
-
-const thumbnailLists ={
-    "image": [400, 750],
-    "avatar": [30, 50, 55, 75, 200],
-    "banner": [300, 750]
-}
 
 const createImage = async (req, res) => {
     try {
@@ -24,24 +17,15 @@ const createImage = async (req, res) => {
                 message: "Title is required or is too short for 'image' category to upload!"
             })
 
-        const oldPath = path.join(req.file.path)
-        const newPath = oldPath.replace(`api\\`, `api\\${imageCategory}\\full\\`)
-        try {
-            await moveFile(oldPath, newPath);
-        } catch (error) {
-            throw error
-        }
+        const filePath = path.join(req.file.path)
 
-        const thumbnailSizeList = thumbnailLists[imageCategory]
-        for (const size of thumbnailSizeList) {
-            await createThumbnail(newPath, imageCategory, size)
-        }
+        await handleThumbnail(filePath, imageCategory)
 
         const image = await Image.create({
             title: title,
             description: description,
             imageCategory: imageCategory,
-            url: newPath,
+            url: filePath,
             userId: req.user.id  
         });
 

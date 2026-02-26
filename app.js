@@ -1,8 +1,15 @@
 const express = require('express');
 const cors = require("cors")
 const app = express();
-const router = require("./routes/routes")
+
+// Import Routes
+const routerUser = require("./routes/routesUser")
+const routerInteraction = require("./routes/routesInteraction")
+const routerContent = require("./routes/routesContent")
 const routerImage = require("./routes/routeImage")
+const routerArticle = require("./routes/routeArticle")
+const routerAdmin= require("./routes/routesAdmin")
+
 const sequelize = require("./db")
 const payload = { state: true, name: 'RyuNova Server', version: '1.0.0' }
 const PORT = process.env.PORT || 4000;
@@ -10,7 +17,7 @@ const CORS_RYUNOVA = process.env.CORS_RYUNOVA || "http://localhost:3000"
 require("dotenv").config();
 const { rateLimit } = require('express-rate-limit');
 const { multerErrorHandler } = require('./utilitises/multer/multerErrorHandler');
-const { User, Image, Tag, Comment, BlackListToken} = require('./models/index');
+const { User, Image, Tag, Comment, BlackListToken, Article, ArticleBlock} = require('./models/index');
 
 async function main() {
   try {
@@ -20,8 +27,10 @@ async function main() {
     await Comment.sync();
     await Tag.sync();
     await BlackListToken.sync();
+    await Article.sync();
+    await ArticleBlock.sync();
     await sequelize.sync();
-    console.log('Base synchronisée.');
+    console.log('Database synchronized.');
   } catch (e) {
     console.error('Erreur d’initialisation :', e);
   }
@@ -49,29 +58,64 @@ app.use(cors({
   credentials: true
 }));
 
-const apiLimiterMain = rateLimit({ 
+
+// API RATE LIMITERS
+// USER
+const apiLimiterUser = rateLimit({ 
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
-    max: parseInt(process.env.RATE_LIMIT_MAX_MAIN), 
+    max: parseInt(process.env.RATE_LIMIT_MAX_USER), 
     message: "Too many request, try again later." 
 });
+// CONTENT
+const apiLimiterContent = rateLimit({ 
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
+    max: parseInt(process.env.RATE_LIMIT_MAX_CONTENT), 
+    message: "Too many request, try again later." 
+});
+// INTERACTION
+const apiLimiterInteraction = rateLimit({ 
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
+    max: parseInt(process.env.RATE_LIMIT_MAX_INTERACTION), 
+    message: "Too many request, try again later." 
+});
+// ADMIN
+const apiLimiterAdmin = rateLimit({ 
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
+    max: parseInt(process.env.RATE_LIMIT_MAX_ADMIN), 
+    message: "Too many request, try again later." 
+});
+// IMAGE API
 const apiLimiterImageAPI = rateLimit({ 
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
     max: parseInt(process.env.RATE_LIMIT_MAX_IMAGE_API), 
     message: "Too many request, try again later." 
 });
+// IMAGE UPLOAD
 const apiLimiterImageUpload = rateLimit({ 
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS), 
     max: parseInt(process.env.RATE_LIMIT_MAX_IMAGE_UPLOAD), 
     message: "Too many request, try again later." 
 });
 
+// ROUTES
+// Image upload
 app.use('/image/upload', apiLimiterImageUpload, routerImage)
 
+app.use('/article/upload', apiLimiterImageUpload, routerArticle)
+
+// Image Api
 app.use('/api', apiLimiterImageAPI, express.static('api'))
 
 app.use(express.json());
 
-app.use('/', apiLimiterMain, router);
+// Main Routes
+app.use('/user', apiLimiterUser, routerUser);
+
+app.use('/content', apiLimiterContent, routerContent);
+
+app.use('/interaction', apiLimiterInteraction, routerInteraction);
+
+app.use('/admin', apiLimiterAdmin, routerAdmin);
 
 app.get("/", (req, res) => {
   res.status(200).json(payload);
@@ -91,3 +135,4 @@ app.use((req, res)=>{
 })
 
 app.listen(PORT, () => console.log({serverState: true, message: `Listening on http://localhost:${PORT}`}));     
+

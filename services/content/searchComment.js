@@ -4,6 +4,7 @@ const { Comment, User } = require("../../models");
 const PAGE_SIZE = 20;
 const VALID_TYPES = ["image", "article", "comment"];
 const VALID_SORTS = ["date", "like"];
+const VALID_ORDER = ["ASC", "DESC"];
 
 const searchComment = async (req, res) => {
     try {
@@ -11,7 +12,8 @@ const searchComment = async (req, res) => {
             id,
             type = "image",
             sort = "date",
-            limit = 1
+            limit = 1,
+            order = "DESC"
         } = req.query;
 
         id = Number(id);
@@ -19,6 +21,7 @@ const searchComment = async (req, res) => {
 
         if (!VALID_TYPES.includes(type)) type = "image";
         if (!VALID_SORTS.includes(sort)) sort = "date";
+        if (!VALID_ORDER.includes(order)) order = "DESC";
         if (isNaN(id) || id < 1) {
             return res.status(400).json({ state: false, error: "Invalid id" });
         }
@@ -55,14 +58,14 @@ const searchComment = async (req, res) => {
 
         // SORT
         const orderMap = {
-            date: [["createdAt", "DESC"]],
+            date: [["createdAt", order]],
             like: [[
                 literal(`(
                     SELECT COUNT(*)
                     FROM "User_Comments"
                     WHERE "User_Comments"."commentLikedId" = "Comment"."id"
                 )`),
-                "DESC"
+                order
             ]]
         };
 
@@ -149,7 +152,6 @@ const searchComment = async (req, res) => {
 };
 
 module.exports = { searchComment };
-
 
 
 

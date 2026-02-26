@@ -4,18 +4,24 @@ const storage = require('./storage')
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype == 'image/png' ||
-      file.mimetype == 'image/jpg' ||
-      file.mimetype == 'image/jpeg' ||
-      file.mimetype == 'image/webp'
-    ) {
-        cb(null, true);
+    const allowed = [
+      "image/png",
+      "image/jpg",
+      "image/jpeg",
+      "image/webp"
+    ];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
     } else {
-        cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+      cb(new Error("Only png, jpg, jpeg, webp allowed"));
     }
+  },
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB
   }
 });
 
 module.exports = upload
+
+
 

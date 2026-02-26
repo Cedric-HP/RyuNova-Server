@@ -13,9 +13,18 @@ const createComment = async (req, res) => {
             comment,
             isReply
         } = req.body;
-        console.log(req.body)
+
+        const contentIdNum = Number(contentId);
+        const targetCommentIdNum = Number(targetCommentId) || null;
 
         // VERIFICATION
+        // Content ID
+        if (!contentIdNum || contentIdNum < 1) {
+            return res.status(400).json({
+                state: false,
+                error: "Invalid contentId"
+            });
+        }
         // Content Type
         if (!VALID_CONTENT_TYPES.includes(contentType)) {
             return res.status(400).json({
@@ -66,16 +75,18 @@ const createComment = async (req, res) => {
         const data = {
             userId,
             comment,
-            isReply,
-            commentId: isReply ? targetCommentId : null
+            isReply: Boolean(isReply),
+            imageId: null,
+            articleId: null,
+            commentId: isReply ? targetCommentIdNum : null
         };
 
         if (contentType === "image") {
-            data.imageId = contentId;
+            data.imageId = contentIdNum;
         }
 
         if (contentType === "article") {
-            data.articleId = contentId; // Not implemented
+            data.articleId = contentIdNum;
         }
 
         const created = await Comment.create(data);
