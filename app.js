@@ -24,11 +24,11 @@ async function main() {
     await sequelize.authenticate();
     await User.sync();
     await Image.sync();
+    await Article.sync();
+    await ArticleBlock.sync();
     await Comment.sync();
     await Tag.sync();
     await BlackListToken.sync();
-    await Article.sync();
-    await ArticleBlock.sync();
     await sequelize.sync();
     console.log('Database synchronized.');
   } catch (e) {
